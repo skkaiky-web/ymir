@@ -1,0 +1,616 @@
+!DOCTYPE html
+html lang=pt-PT
+head
+    meta charset=UTF-8
+    meta name=viewport content=width=device-width, initial-scale=1.0
+    titleLegend of Ymir Analisador de XP e Ferramenta de Grindtitle
+    
+    !-- Google AdSense Script (Substitua pelo seu client ID real) --
+    script async src=httpspagead2.googlesyndication.compageadjsadsbygoogle.jsclient=ca-pub-SEU_ID_AQUI crossorigin=anonymousscript
+
+    !-- Tailwind CSS --
+    script src=httpscdn.tailwindcss.comscript
+    
+    !-- Chart.js --
+    script src=httpscdn.jsdelivr.netnpmchart.jsscript
+
+    !-- Google Fonts --
+    link href=httpsfonts.googleapis.comcss2family=Cinzelwght@400;700&family=Interwght@300;400;600&display=swap rel=stylesheet
+
+    !-- Configuration & Styles --
+    script
+        tailwind.config = {
+            theme {
+                extend {
+                    colors {
+                        ymir {
+                            bg '#F5F2EB',        Warm Parchment - Light Background Constraint 
+                            primary '#2C3E50',   Nordic Blue 
+                            accent '#C0392B',    Combat Red 
+                            gold '#D4AC0D',      Legendary Gold 
+                            text '#1F2937',      Dark Gray Text 
+                            panel '#FFFFFF',     White Panels 
+                        }
+                    },
+                    fontFamily {
+                        header ['Cinzel', 'serif'],
+                        body ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    script
+
+    style
+         Chart Container Styling - MANDATORY for responsiveness 
+        .chart-container {
+            position relative;
+            width 100%;
+            max-width 800px;  Max width to prevent stretching 
+            height 300px;     Base height 
+            max-height 400px;
+            margin-left auto;
+            margin-right auto;
+        }
+
+         Responsive adjustments for charts 
+        @media (min-width 768px) {
+            .chart-container {
+                height 400px;
+            }
+        }
+
+        body {
+            background-color #F5F2EB;
+            color #1F2937;
+        }
+
+        .card {
+            box-shadow 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition all 0.3s ease;
+        }
+        
+        .cardhover {
+            box-shadow 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+         Custom Scrollbar 
+        -webkit-scrollbar {
+            width 8px;
+        }
+        -webkit-scrollbar-track {
+            background #E5E7EB;
+        }
+        -webkit-scrollbar-thumb {
+            background #9CA3AF;
+            border-radius 4px;
+        }
+        -webkit-scrollbar-thumbhover {
+            background #6B7280;
+        }
+    style
+head
+body class=font-body text-ymir-text antialiased
+
+    !-- Navigation --
+    nav class=bg-ymir-primary text-white sticky top-0 z-50 shadow-lg
+        div class=max-w-7xl mx-auto px-4 smpx-6 lgpx-8
+            div class=flex items-center justify-between h-16
+                div class=flex items-center
+                    span class=font-header text-xl font-bold text-ymir-goldLegend of Ymirspan
+                    span class=ml-2 text-sm opacity-75 hidden smblock Ferramenta de Análise de XPspan
+                div
+                div class=flex space-x-4
+                    button onclick=scrollToSection('calculator') class=hovertext-ymir-gold px-3 py-2 rounded-md text-sm font-medium transitionCalculadorabutton
+                    button onclick=scrollToSection('curve') class=hovertext-ymir-gold px-3 py-2 rounded-md text-sm font-medium transitionCurva de XPbutton
+                    button onclick=scrollToSection('strategy') class=hovertext-ymir-gold px-3 py-2 rounded-md text-sm font-medium transitionEstratégiabutton
+                div
+            div
+        div
+    nav
+
+    !-- Hero  Intro Section --
+    header class=bg-white border-b border-gray-200
+        div class=max-w-7xl mx-auto px-4 py-10 smpx-6 lgpx-8 text-center
+            h1 class=text-4xl font-header font-bold text-ymir-primary mb-4Domine a Curva de Evoluçãoh1
+            p class=text-lg text-gray-600 max-w-3xl mx-auto
+                No mundo de Ymir, o ganho de XP é governado por matemática rigorosa. Esta ferramenta descodifica os requisitos de nível, calcula o seu tempo exato para evoluir (Time-to-Level) e ajuda a otimizar a sua rota de farm com dados precisos de ganho por minuto e hora.
+            p
+        div
+    header
+
+    main class=max-w-7xl mx-auto px-4 smpx-6 lgpx-8 py-8 space-y-12
+
+        !-- BLOCO DE ANÚNCIO 1 Topo (Abaixo do cabeçalho) --
+        div class=w-full bg-white shadow-sm border border-gray-200 rounded-lg p-2 text-center overflow-hidden
+            span class=text-xs text-gray-400 uppercase tracking-widest block mb-2Publicidadespan
+            ins class=adsbygoogle
+                 style=displayblock
+                 data-ad-client=ca-pub-SEU_ID_AQUI
+                 data-ad-slot=SEU_SLOT_AQUI
+                 data-ad-format=auto
+                 data-full-width-responsive=trueins
+            script
+                 (adsbygoogle = window.adsbygoogle  []).push({});
+            script
+        div
+
+        !-- SECTION 1 CALCULADORA DE GRIND (The Core Tool) --
+        section id=calculator class=space-y-6
+            div class=border-l-4 border-ymir-gold pl-4
+                h2 class=text-2xl font-header font-bold text-ymir-primaryCalculadora de Grind em Tempo Realh2
+                p class=text-gray-600 mt-1
+                    Insira os seus dados atuais de jogo para projetar exatamente quanto tempo falta para o próximo nível. Realize um teste de 1 minuto no jogo para obter o valor de XP Ganho.
+                p
+            div
+
+            div class=grid grid-cols-1 lggrid-cols-3 gap-8
+                !-- Input Panel --
+                div class=bg-white p-6 rounded-lg card lgcol-span-1 border border-gray-200
+                    h3 class=text-lg font-bold text-ymir-primary mb-4 border-b pb-2Parâmetros de Entradah3
+                    
+                    div class=space-y-4
+                        div
+                            label class=block text-sm font-medium text-gray-700Nível Atuallabel
+                            input type=number id=inputLevel value=40 min=1 max=100 class=mt-1 block w-full rounded-md border-gray-300 shadow-sm focusborder-ymir-primary focusring focusring-ymir-primary focusring-opacity-50 p-2 border onchange=updateCalculator()
+                        div
+
+                        div
+                            label class=block text-sm font-medium text-gray-700Percentagem de XP Atual (%)label
+                            input type=number id=inputCurrentPercent value=0 min=0 max=99.99 step=0.01 class=mt-1 block w-full rounded-md border-gray-300 shadow-sm focusborder-ymir-primary focusring focusring-ymir-primary focusring-opacity-50 p-2 border onchange=updateCalculator()
+                        div
+
+                        div class=bg-blue-50 p-4 rounded-md border border-blue-100
+                            label class=block text-sm font-bold text-blue-800Teste de XP (1 Minuto)label
+                            p class=text-xs text-blue-600 mb-2Elimine monstros por 1 minuto e anote o XP total.p
+                            div class=flex items-center space-x-2
+                                input type=number id=inputXpPerMin value=15000 class=block w-full rounded-md border-blue-300 shadow-sm focusborder-blue-500 focusring focusring-blue-500 focusring-opacity-50 p-2 border onchange=updateCalculator()
+                                span class=text-sm text-gray-500XPminspan
+                            div
+                        div
+
+                        button onclick=updateCalculator() class=w-full bg-ymir-primary text-ymir-gold font-bold py-3 px-4 rounded hoverbg-gray-800 transition shadow-lg
+                            Calcular Previsão
+                        button
+                    div
+                div
+
+                !-- Results Panel --
+                div class=bg-white p-6 rounded-lg card lgcol-span-2 border border-gray-200 flex flex-col justify-between
+                    
+                    !-- Stats Grid --
+                    div class=grid grid-cols-2 mdgrid-cols-4 gap-4 mb-6
+                        div class=text-center p-3 bg-gray-50 rounded border
+                            div class=text-xs text-gray-500 uppercase tracking-wideXP Necessário (Total)div
+                            div id=displayTotalReq class=text-lg font-bold text-ymir-primary0div
+                        div
+                        div class=text-center p-3 bg-gray-50 rounded border
+                            div class=text-xs text-gray-500 uppercase tracking-wideXP Restantediv
+                            div id=displayRemaining class=text-lg font-bold text-ymir-accent0div
+                        div
+                        div class=text-center p-3 bg-gray-50 rounded border
+                            div class=text-xs text-gray-500 uppercase tracking-wideGanho por Horadiv
+                            div id=displayXpHour class=text-lg font-bold text-green-6000div
+                        div
+                        div class=text-center p-3 bg-gray-50 rounded border
+                            div class=text-xs text-gray-500 uppercase tracking-wideGanhos Diários (24h)div
+                            div id=displayXpDay class=text-lg font-bold text-blue-6000div
+                        div
+                    div
+
+                    !-- Prediction Big Number --
+                    div class=text-center py-6 border-t border-b border-gray-100 mb-6
+                        h4 class=text-gray-500 text-sm uppercase mb-2Tempo Estimado para Level Up (AFK)h4
+                        div id=displayTime class=text-5xl font-header font-bold text-ymir-primary tracking-tight0h 00mdiv
+                        div id=displayDate class=text-sm text-gray-400 mt-2Data provável -div
+                    div
+
+                    !-- Visual Progress --
+                    div class=w-full bg-gray-200 rounded-full h-6 mb-2 overflow-hidden shadow-inner relative
+                        div id=progressBar class=bg-gradient-to-r from-ymir-gold to-yellow-500 h-6 rounded-full transition-all duration-1000 style=width 0%div
+                        div id=progressText class=absolute inset-0 flex items-center justify-center text-xs font-bold text-white drop-shadow-md0%div
+                    div
+                div
+            div
+        section
+
+        !-- BLOCO DE ANÚNCIO 2 Meio (Entre a Calculadora e a Curva de XP) --
+        div class=w-full bg-white shadow-sm border border-gray-200 rounded-lg p-2 text-center overflow-hidden
+            span class=text-xs text-gray-400 uppercase tracking-widest block mb-2Publicidadespan
+            ins class=adsbygoogle
+                 style=displayblock
+                 data-ad-client=ca-pub-SEU_ID_AQUI
+                 data-ad-slot=SEU_SLOT_AQUI
+                 data-ad-format=auto
+                 data-full-width-responsive=trueins
+            script
+                 (adsbygoogle = window.adsbygoogle  []).push({});
+            script
+        div
+
+        !-- SECTION 2 XP CURVE ANALYSIS --
+        section id=curve class=space-y-6
+            div class=border-l-4 border-ymir-primary pl-4
+                h2 class=text-2xl font-header font-bold text-ymir-primaryAnálise da Curva de Evoluçãoh2
+                p class=text-gray-600 mt-1
+                    Entenda a escala exponencial. O gráfico abaixo mostra como a quantidade de XP necessária aumenta drasticamente a cada nível, ajudando a planear em quais faixas de nível precisará de dedicar mais tempo.
+                p
+            div
+
+            div class=bg-white p-6 rounded-lg card border border-gray-200
+                div class=chart-container
+                    canvas id=xpCurveChartcanvas
+                div
+                div class=mt-4 text-center text-sm text-gray-500 italic
+                    Dados baseados em modelos de progressão padrão de MMORPGs, utilizando curva exponencial ajustada.
+                div
+            div
+        section
+
+        !-- SECTION 3 STRATEGY & MODIFIERS --
+        section id=strategy class=space-y-6
+            div class=border-l-4 border-ymir-accent pl-4
+                h2 class=text-2xl font-header font-bold text-ymir-primaryOtimização de Ganhos (Buffs)h2
+                p class=text-gray-600 mt-1
+                    Simule o impacto de poções, estatuto VIP e bónus de grupo. Veja como pequenos incrementos percentuais resultam em horas poupadas a longo prazo.
+                p
+            div
+
+            div class=grid grid-cols-1 mdgrid-cols-3 gap-6
+                !-- Modifiers Controls --
+                div class=bg-white p-5 rounded-lg border border-gray-200 mdcol-span-1
+                    h3 class=font-bold text-lg mb-4 text-ymir-primaryModificadores Ativosh3
+                    div class=space-y-3 id=modifiersContainer
+                        !-- Checkboxes generated by JS --
+                    div
+                    div class=mt-6 pt-4 border-t border-gray-100
+                        div class=flex justify-between items-center
+                            span class=font-bold text-gray-700Multiplicador Totalspan
+                            span id=totalMultiplierDisplay class=font-bold text-ymir-accent text-xl100%span
+                        div
+                    div
+                div
+
+                !-- Impact Chart --
+                div class=bg-white p-5 rounded-lg border border-gray-200 mdcol-span-2
+                    h3 class=font-bold text-lg mb-2 text-ymir-primaryEconomia de Tempo (Horas)h3
+                    div class=chart-container style=height 250px;
+                        canvas id=impactChartcanvas
+                    div
+                div
+            div
+        section
+
+        !-- SECTION 4 DATA TABLE --
+        section class=space-y-6
+            div class=flex justify-between items-end border-b border-gray-300 pb-2
+                h2 class=text-2xl font-header font-bold text-ymir-primaryTabela de Referência de XPh2
+                div class=flex space-x-2
+                    button onclick=changePage(-1) class=px-3 py-1 bg-gray-200 rounded hoverbg-gray-300 text-smAnteriorbutton
+                    span id=pageIndicator class=px-3 py-1 text-sm font-mediumPág 1span
+                    button onclick=changePage(1) class=px-3 py-1 bg-gray-200 rounded hoverbg-gray-300 text-smPróximabutton
+                div
+            div
+
+            div class=bg-white rounded-lg shadow overflow-hidden border border-gray-200
+                div class=overflow-x-auto
+                    table class=min-w-full divide-y divide-gray-200
+                        thead class=bg-gray-50
+                            tr
+                                th scope=col class=px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-widerNívelth
+                                th scope=col class=px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-widerXP Total Necessárioth
+                                th scope=col class=px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-widerXP da Faixa Anteriorth
+                                th scope=col class=px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-widerMobs (Est. 15k XP)th
+                            tr
+                        thead
+                        tbody id=xpTableBody class=bg-white divide-y divide-gray-200
+                            !-- Populated by JS --
+                        tbody
+                    table
+                div
+            div
+        section
+
+        !-- BLOCO DE ANÚNCIO 3 Fundo (Acima do Rodapé) --
+        div class=w-full bg-white shadow-sm border border-gray-200 rounded-lg p-2 text-center overflow-hidden mt-8
+            span class=text-xs text-gray-400 uppercase tracking-widest block mb-2Publicidadespan
+            ins class=adsbygoogle
+                 style=displayblock
+                 data-ad-client=ca-pub-SEU_ID_AQUI
+                 data-ad-slot=SEU_SLOT_AQUI
+                 data-ad-format=auto
+                 data-full-width-responsive=trueins
+            script
+                 (adsbygoogle = window.adsbygoogle  []).push({});
+            script
+        div
+
+    main
+
+    footer class=bg-ymir-primary text-gray-300 py-8 mt-12 border-t-4 border-ymir-gold
+        div class=max-w-7xl mx-auto px-4 text-center
+            p class=font-header text-ymir-gold text-lg mb-2Legend of Ymir Fan Kitp
+            p class=text-smEsta ferramenta é uma simulação baseada em mecânicas de MMORPG. Os valores exatos podem variar conforme as atualizações do jogo.p
+            p class=text-xs mt-4 text-gray-500&copy; 2026 Análise de Dados de Jogos.p
+        div
+    footer
+
+    !-- LOGIC SCRIPT --
+    script
+         --- DATA GENERATION (Simulated XP Curve) ---
+         Generating a typical K-MMO exponential curve
+        const MAX_LEVEL = 100;
+        const XP_DATA = [];
+        
+         Base formula simulation Base  Level ^ Power
+         Adjusted to mimic steep curves at lvl 40, 60, 80
+        for (let i = 1; i = MAX_LEVEL; i++) {
+            let base = 10000;
+            let exponent = 2.8; 
+            if (i  40) exponent = 3.2;  Soft cap 1
+            if (i  70) exponent = 3.8;  Soft cap 2
+            
+            let xp = Math.floor(base  Math.pow(i, exponent));
+            XP_DATA.push({
+                level i,
+                xp_required xp,
+                diff_prev i  1  xp - XP_DATA[i-2].xp_required  0
+            });
+        }
+
+         --- STATE MANAGEMENT ---
+        let appState = {
+            level 40,
+            currentPercent 0,
+            baseXpPerMin 15000,
+            modifiers {
+                vip { name VIP Status (+10%), val 0.10, active false },
+                potion { name Poção de XP (+50%), val 0.50, active false },
+                party { name Bónus de Grupo (+20%), val 0.20, active false },
+                event { name Evento do Servidor (+100%), val 1.00, active false }
+            },
+            tablePage 0,
+            rowsPerPage 10
+        };
+
+         --- CHARTS INSTANCES ---
+        let curveChartInstance = null;
+        let impactChartInstance = null;
+
+         --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () = {
+            initModifiers();
+            updateCalculator();
+            renderTable();
+            initCharts();
+        });
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior 'smooth' });
+        }
+
+         --- CORE CALCULATOR LOGIC ---
+        function updateCalculator() {
+             Get inputs
+            const lvlInput = parseInt(document.getElementById('inputLevel').value);
+            const pctInput = parseFloat(document.getElementById('inputCurrentPercent').value);
+            const xpMinInput = parseInt(document.getElementById('inputXpPerMin').value);
+
+             Validation
+            if (lvlInput  1  lvlInput = MAX_LEVEL) return;
+            appState.level = lvlInput;
+            appState.currentPercent = pctInput;
+            appState.baseXpPerMin = xpMinInput;
+
+             Using a simplified model where xp_required in array is the total for that level bucket
+            const totalXpForLevel = Math.floor(XP_DATA[appState.level - 1].xp_required  0.2); 
+            
+             Calculate Remaining
+            const xpDone = totalXpForLevel  (appState.currentPercent  100);
+            const xpRemaining = totalXpForLevel - xpDone;
+
+             Apply Modifiers
+            let multiplier = 1;
+            Object.values(appState.modifiers).forEach(mod = {
+                if (mod.active) multiplier += mod.val;
+            });
+
+             Update Multiplier Display
+            document.getElementById('totalMultiplierDisplay').innerText = Math.round(multiplier  100) + %;
+
+             Calculate Rates
+            const effectiveXpPerMin = appState.baseXpPerMin  multiplier;
+            const effectiveXpPerHour = effectiveXpPerMin  60;
+            const effectiveXpPerDay = effectiveXpPerHour  24;
+
+             Time Calculation
+            const minutesRemaining = xpRemaining  effectiveXpPerMin;
+            const hours = Math.floor(minutesRemaining  60);
+            const minutes = Math.floor(minutesRemaining % 60);
+
+             Update UI Numbers
+            document.getElementById('displayTotalReq').innerText = formatNumber(totalXpForLevel);
+            document.getElementById('displayRemaining').innerText = formatNumber(xpRemaining);
+            document.getElementById('displayXpHour').innerText = formatNumber(effectiveXpPerHour);
+            document.getElementById('displayXpDay').innerText = formatNumber(effectiveXpPerDay);
+            
+            document.getElementById('displayTime').innerText = `${hours}h ${minutes}m`;
+            
+             Date Prediction
+            const now = new Date();
+            now.setMinutes(now.getMinutes() + minutesRemaining);
+            document.getElementById('displayDate').innerText = `Data prevista ${now.toLocaleDateString()} às ${now.toLocaleTimeString([], {hour '2-digit', minute'2-digit'})}`;
+
+             Progress Bar
+            document.getElementById('progressBar').style.width = `${appState.currentPercent}%`;
+            document.getElementById('progressText').innerText = `${appState.currentPercent}%`;
+
+             Update Comparison Chart
+            updateImpactChart(hours + (minutes60));
+        }
+
+         --- MODIFIERS LOGIC ---
+        function initModifiers() {
+            const container = document.getElementById('modifiersContainer');
+            if (!container) return;  Segurança caso o elemento não exista
+            
+            container.innerHTML = '';
+            Object.keys(appState.modifiers).forEach(key = {
+                const mod = appState.modifiers[key];
+                const div = document.createElement('div');
+                div.className = flex items-center;
+                div.innerHTML = `
+                    input id=mod_${key} type=checkbox class=h-4 w-4 text-ymir-primary focusring-ymir-primary border-gray-300 rounded cursor-pointer ${mod.active  'checked'  ''}
+                    label for=mod_${key} class=ml-2 block text-sm text-gray-900 cursor-pointer select-none
+                        ${mod.name}
+                    label
+                `;
+                div.querySelector('input').addEventListener('change', (e) = {
+                    appState.modifiers[key].active = e.target.checked;
+                    updateCalculator();
+                });
+                container.appendChild(div);
+            });
+        }
+
+         --- CHARTS LOGIC ---
+        function initCharts() {
+             1. XP Curve Chart
+            const ctxCurve = document.getElementById('xpCurveChart').getContext('2d');
+            if (!ctxCurve) return;
+
+            const labels = XP_DATA.filter((_, i) = (i+1) % 5 === 0).map(d = `Lvl ${d.level}`);
+            const dataPoints = XP_DATA.filter((_, i) = (i+1) % 5 === 0).map(d = d.xp_required);
+
+            curveChartInstance = new Chart(ctxCurve, {
+                type 'line',
+                data {
+                    labels labels,
+                    datasets [{
+                        label 'XP Total Acumulado',
+                        data dataPoints,
+                        borderColor '#2C3E50',
+                        backgroundColor 'rgba(44, 62, 80, 0.1)',
+                        borderWidth 2,
+                        fill true,
+                        tension 0.4,
+                        pointRadius 2
+                    }]
+                },
+                options {
+                    responsive true,
+                    maintainAspectRatio false,
+                    plugins {
+                        legend { display false },
+                        tooltip {
+                            mode 'index',
+                            intersect false,
+                            backgroundColor 'rgba(255, 255, 255, 0.9)',
+                            titleColor '#1F2937',
+                            bodyColor '#1F2937',
+                            borderColor '#E5E7EB',
+                            borderWidth 1
+                        }
+                    },
+                    scales {
+                        y {
+                            beginAtZero true,
+                            grid { color '#F3F4F6' },
+                            ticks { callback (value) = value  1000000 + 'M' }
+                        },
+                        x {
+                            grid { display false }
+                        }
+                    }
+                }
+            });
+
+             2. Impact Chart
+            const ctxImpact = document.getElementById('impactChart').getContext('2d');
+            if (!ctxImpact) return;
+
+            impactChartInstance = new Chart(ctxImpact, {
+                type 'bar',
+                data {
+                    labels ['Sem Buffs', 'Com Buffs Atuais'],
+                    datasets [{
+                        label 'Horas para Upar',
+                        data [0, 0],
+                        backgroundColor ['#9CA3AF', '#D4AC0D'],
+                        borderRadius 4
+                    }]
+                },
+                options {
+                    indexAxis 'y',
+                    responsive true,
+                    maintainAspectRatio false,
+                    plugins {
+                        legend { display false }
+                    },
+                    scales {
+                        x {
+                            grid { color '#F3F4F6' },
+                            title { display true, text 'Horas Restantes' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateImpactChart(currentHours) {
+            if (!impactChartInstance) return;
+
+            const xpRemaining = (XP_DATA[appState.level - 1].xp_required  0.2)  ((100 - appState.currentPercent)  100);
+            const baseHours = (xpRemaining  appState.baseXpPerMin)  60;
+
+            impactChartInstance.data.datasets[0].data = [baseHours, currentHours];
+            impactChartInstance.update();
+        }
+
+         --- TABLE LOGIC ---
+        function renderTable() {
+            const tbody = document.getElementById('xpTableBody');
+            if (!tbody) return;
+
+            tbody.innerHTML = '';
+
+            const start = appState.tablePage  appState.rowsPerPage;
+            const end = start + appState.rowsPerPage;
+            const pageData = XP_DATA.slice(start, end);
+
+            pageData.forEach(row = {
+                const tr = document.createElement('tr');
+                const levelXp = Math.floor(row.xp_required  0.2); 
+                const mobsNeeded = Math.ceil(levelXp  15000); 
+
+                tr.innerHTML = `
+                    td class=px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900${row.level}td
+                    td class=px-6 py-4 whitespace-nowrap text-sm text-gray-500${formatNumber(levelXp)}td
+                    td class=px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-xs+${formatNumber(levelXp  0.15)} XPtd
+                    td class=px-6 py-4 whitespace-nowrap text-sm text-gray-500${formatNumber(mobsNeeded)}td
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('pageIndicator').innerText = `Pág ${appState.tablePage + 1} de ${Math.ceil(XP_DATA.length  appState.rowsPerPage)}`;
+        }
+
+        function changePage(delta) {
+            const maxPages = Math.ceil(XP_DATA.length  appState.rowsPerPage);
+            const newPage = appState.tablePage + delta;
+            
+            if (newPage = 0 && newPage  maxPages) {
+                appState.tablePage = newPage;
+                renderTable();
+            }
+        }
+
+         --- UTILS ---
+        function formatNumber(num) {
+            if (num = 1000000) return (num  1000000).toFixed(2) + 'M';
+            if (num = 1000) return (num  1000).toFixed(1) + 'k';
+            return num.toString();
+        }
+    script
+body
+html
